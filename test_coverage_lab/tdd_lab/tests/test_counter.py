@@ -10,3 +10,14 @@ how to call the web service and assert what it should return.
 - The service must be able to update a counter by name.
 - The service must be able to read the counter
 """
+import pytest
+from src import app
+from src import status
+
+@pytest.fixture()
+def client():
+    return app.test_client()
+
+def test_create_counter(client):
+    result = client.post("/counters/foo")
+    assert result.status_code == status.HTTP_201_CREATED
