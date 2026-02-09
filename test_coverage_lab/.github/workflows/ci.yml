@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
@@ -9,6 +10,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ci_lab
+
+    env:
+      PYTHONPATH: ${{ github.workspace }}/ci_lab
 
     steps:
       - name: Checkout code
@@ -27,4 +35,4 @@ jobs:
 
       - name: Run tests with coverage gate
         run: |
-          pytest --cov=. --cov-report=term-missing --cov-fail-under=80
+          pytest --import-mode=importlib --cov=src --cov-report=term-missing --cov-fail-under=80
