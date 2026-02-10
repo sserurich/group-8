@@ -1,13 +1,14 @@
 name: CI
 
 on:
-  workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
-    branches: ["**"]
-
-
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+  
 jobs:
   test:
     runs-on: ubuntu-latest
