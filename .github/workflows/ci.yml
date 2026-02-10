@@ -8,18 +8,17 @@ on:
     branches:
       - "**"
   workflow_dispatch:
-  
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
-  defaults:
-    run:
-      working-directory: test_coverage_lab/ci_lab
+    defaults:
+      run:
+        working-directory: test_coverage_lab/ci_lab
 
-  env:
-    PYTHONPATH: ${{ github.workspace }}/test_coverage_lab/ci_lab
-
+    env:
+      PYTHONPATH: ${{ github.workspace }}/test_coverage_lab/ci_lab
 
     steps:
       - name: Checkout code
