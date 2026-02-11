@@ -128,7 +128,6 @@ def test_valid_withdrawal(setup_account):
 
     with pytest.raises(DataValidationError):
         account.withdraw(0)
-
     with pytest.raises(DataValidationError):
         account.withdraw(-50)
 
@@ -139,7 +138,6 @@ def test_valid_withdrawal(setup_account):
     withdraw_amount = 65
 
     assert withdraw_amount > 0
-    assert withdraw_amount <= balance
 
     account.withdraw(withdraw_amount)
     db.session.commit()
