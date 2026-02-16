@@ -1,6 +1,7 @@
 """
 Test Cases for Account Model
 """
+
 import json
 from random import randrange
 import pytest
@@ -9,17 +10,19 @@ from models.account import Account, DataValidationError
 
 ACCOUNT_DATA = {}
 
+
 @pytest.fixture(scope="module", autouse=True)
 def load_account_data():
-    """ Load data needed by tests """
+    """Load data needed by tests"""
     global ACCOUNT_DATA
-    with open('tests/fixtures/account_data.json') as json_data:
+    with open("tests/fixtures/account_data.json") as json_data:
         ACCOUNT_DATA = json.load(json_data)
 
     # Set up the database tables
     db.create_all()
     yield
     db.session.close()
+
 
 @pytest.fixture
 def setup_account():
@@ -29,13 +32,15 @@ def setup_account():
     db.session.commit()
     return account
 
+
 @pytest.fixture(scope="function", autouse=True)
 def setup_and_teardown():
-    """ Truncate the tables and set up for each test """
+    """Truncate the tables and set up for each test"""
     db.session.query(Account).delete()
     db.session.commit()
     yield
     db.session.remove()
+
 
 ######################################################################
 #  E X A M P L E   T E S T   C A S E
@@ -52,6 +57,7 @@ def setup_and_teardown():
 # Description: Ensure roles can be assigned and checked.
 # ===========================
 
+
 def test_account_role_assignment():
     """Test assigning roles to an account"""
     account = Account(name="John Doe", email="johndoe@example.com", role="user")
@@ -63,12 +69,14 @@ def test_account_role_assignment():
     account.change_role("admin")
     assert account.role == "admin"
 
+
 # ===========================
 # Test: Invalid Role Assignment
 # Author: John Businge
 # Date: 2025-01-30
 # Description: Ensure invalid roles raise a DataValidationError.
 # ===========================
+
 
 def test_invalid_role_assignment():
     """Test assigning an invalid role"""
@@ -122,6 +130,7 @@ def test_missing_required_fields():
 
     db.session.rollback()
 
+
 # ===========================
 # Test: Invalid Email Input
 # Author: Angel V
@@ -133,18 +142,19 @@ def test_missing_required_fields():
 # - Ensure accounts without an email cannot be created.
 def test_invalid_email_input():
     invalid_emails = [
-        'plainaddress',
-        'missingatsign.com',
-        'missingdomain@',
-        '@missingusername.com',
-        'user@domain'
+        "plainaddress",
+        "missingatsign.com",
+        "missingdomain@",
+        "@missingusername.com",
+        "user@domain",
     ]
 
     for email in invalid_emails:
-        account = Account(name='Test User', email=email, role='user')
+        account = Account(name="Test User", email=email, role="user")
         with pytest.raises(DataValidationError):
             account.validate_email()
-            
+
+
 # TODO Test deleting an account
 # ===========================
 # Test: Delete Account
@@ -153,13 +163,15 @@ def test_invalid_email_input():
 # Description: Ensure an account can be deleted from the database.
 # ===========================
 
+
 def test_delete_account(setup_account):
     account = setup_account
     account_id = account.id
 
-    account.delete()                        # deleting the account
+    account.delete()  # deleting the account
     deleted_account = Account.query.get(account_id)
     assert deleted_account is None
+
 
 # TODO 5: Test Password Hashing
 # ======================================
@@ -188,6 +200,7 @@ def test_password_hashing(setup_account):
     # check the password is not returning true for any random string
     wrong_test_password = "wrongtestpassword123!"
     assert setup_account.check_password(wrong_test_password) == False
+
 
 # TODO 6: Test valid withdrawal
 # - Verify that withdrawing a valid amount correctly decreases the balance.
@@ -220,6 +233,7 @@ def test_valid_withdrawal(setup_account):
 
     expected_amount = balance - withdraw_amount
     assert account.balance == expected_amount
+
 
 # TODO 7: Test Searching by Name
 # - Ensure accounts can be searched by their **name**.
