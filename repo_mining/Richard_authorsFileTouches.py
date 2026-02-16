@@ -1,4 +1,3 @@
-
 import csv
 import os
 import time
@@ -8,8 +7,8 @@ from RichardSserunjogi_CollectFiles import github_auth, countfiles
 
 
 # Configurations
-repo = "scottyab/rootbeer" 
-lstTokens = ["", ""] #DO NOT COMMIT real tokens
+repo = "scottyab/rootbeer"
+lstTokens = ["", ""]  # DO NOT COMMIT real tokens
 
 OUTPUT_CSV = "data/file_touches_authors_dates.csv"
 PER_PAGE = 100
@@ -53,44 +52,50 @@ def collect_file_touches(repo, source_files, lstTokens):
                 commitMeta = commitObj.get("commit") or {}
                 commitAuthor = commitMeta.get("author") or {}
 
-                rows.append({
-                    "filename": filename,
-                    "sha": sha,
-                    "author_login": author_login,
-                    "author_name": commitAuthor.get("name"),
-                    "author_email": commitAuthor.get("email"),
-                    "date_iso": commitAuthor.get("date")
-                })
+                rows.append(
+                    {
+                        "filename": filename,
+                        "sha": sha,
+                        "author_login": author_login,
+                        "author_name": commitAuthor.get("name"),
+                        "author_email": commitAuthor.get("email"),
+                        "date_iso": commitAuthor.get("date"),
+                    }
+                )
 
             page += 1
 
     return rows
 
 
-# Write output to CSV 
+# Write output to CSV
 def write_touches_csv(output_path, rows):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow([
-            "Filename",
-            "CommitSHA",
-            "AuthorLogin",
-            "AuthorName",
-            "AuthorEmail",
-            "CommitDate"
-        ])
+        writer.writerow(
+            [
+                "Filename",
+                "CommitSHA",
+                "AuthorLogin",
+                "AuthorName",
+                "AuthorEmail",
+                "CommitDate",
+            ]
+        )
 
         for r in rows:
-            writer.writerow([
-                r["filename"],
-                r["sha"],
-                r["author_login"],
-                r["author_name"],
-                r["author_email"],
-                r["date_iso"]
-            ])
+            writer.writerow(
+                [
+                    r["filename"],
+                    r["sha"],
+                    r["author_login"],
+                    r["author_name"],
+                    r["author_email"],
+                    r["date_iso"],
+                ]
+            )
 
 
 if __name__ == "__main__":

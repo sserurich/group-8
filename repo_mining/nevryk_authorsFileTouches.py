@@ -43,7 +43,11 @@ def collect_file_touches(repo, source_files, lstTokens):
     while True:
         spage = str(ipage)
         commitsUrl = (
-            "https://api.github.com/repos/" + repo + "/commits?page=" + spage + "&per_page=100"
+            "https://api.github.com/repos/"
+            + repo
+            + "/commits?page="
+            + spage
+            + "&per_page=100"
         )
         jsonCommits, ct = github_auth(commitsUrl, lstTokens, ct)
 
