@@ -6,17 +6,18 @@ import os
 
 DATA_DIR = os.path.join("repo_mining", "data")
 if not os.path.exists(DATA_DIR):
- os.makedirs(DATA_DIR)
+    os.makedirs(DATA_DIR)
 
 # Only treat these as "source files" for scottyab/rootbeer
 SOURCE_FILE_EXT = (".java", ".kt", ".kts")
+
 
 # GitHub Authentication function
 def github_auth(url, lsttoken, ct):
     jsonData = None
     try:
         ct = ct % len(lstTokens)
-        headers = {'Authorization': 'Bearer {}'.format(lsttoken[ct])}
+        headers = {"Authorization": "Bearer {}".format(lsttoken[ct])}
         request = requests.get(url, headers=headers)
         jsonData = json.loads(request.content)
         ct += 1
@@ -24,6 +25,7 @@ def github_auth(url, lsttoken, ct):
         pass
         print(e)
     return jsonData, ct
+
 
 # @dictFiles, empty dictionary of files
 # @lstTokens, GitHub authentication tokens
@@ -36,7 +38,13 @@ def countfiles(dictfiles, lsttokens, repo):
         # loop though all the commit pages until the last returned empty page
         while True:
             spage = str(ipage)
-            commitsUrl = 'https://api.github.com/repos/' + repo + '/commits?page=' + spage + '&per_page=100'
+            commitsUrl = (
+                "https://api.github.com/repos/"
+                + repo
+                + "/commits?page="
+                + spage
+                + "&per_page=100"
+            )
             jsonCommits, ct = github_auth(commitsUrl, lsttokens, ct)
 
             # break out of the while loop if there are no more commits in the pages
@@ -44,13 +52,13 @@ def countfiles(dictfiles, lsttokens, repo):
                 break
             # iterate through the list of commits in  spage
             for shaObject in jsonCommits:
-                sha = shaObject['sha']
+                sha = shaObject["sha"]
                 # For each commit, use the GitHub commit API to extract the files touched by the commit
-                shaUrl = 'https://api.github.com/repos/' + repo + '/commits/' + sha
+                shaUrl = "https://api.github.com/repos/" + repo + "/commits/" + sha
                 shaDetails, ct = github_auth(shaUrl, lsttokens, ct)
-                filesjson = shaDetails['files']
+                filesjson = shaDetails["files"]
                 for filenameObj in filesjson:
-                    filename = filenameObj['filename']
+                    filename = filenameObj["filename"]
                     if not filename.lower().endswith(SOURCE_FILE_EXT):
                         continue
                     dictfiles[filename] = dictfiles.get(filename, 0) + 1
@@ -59,8 +67,10 @@ def countfiles(dictfiles, lsttokens, repo):
     except:
         print("Error receiving data")
         exit(0)
+
+
 # GitHub repo
-repo = 'scottyab/rootbeer'
+repo = "scottyab/rootbeer"
 # repo = 'Skyscanner/backpack' # This repo is commit heavy. It takes long to finish executing
 # repo = 'k9mail/k-9' # This repo is commit heavy. It takes long to finish executing
 # repo = 'mendhak/gpslogger'
@@ -74,13 +84,13 @@ lstTokens = ["", ""]
 
 dictfiles = dict()
 countfiles(dictfiles, lstTokens, repo)
-print('Total number of files: ' + str(len(dictfiles)))
+print("Total number of files: " + str(len(dictfiles)))
 
-file = repo.split('/')[1]
+file = repo.split("/")[1]
 # change this to the path of your file
-fileOutput = os.path.join(DATA_DIR, 'nevryk_file_' + file + '.csv')
+fileOutput = os.path.join(DATA_DIR, "nevryk_file_" + file + ".csv")
 rows = ["Filename", "Touches"]
-fileCSV = open(fileOutput, 'w')
+fileCSV = open(fileOutput, "w")
 writer = csv.writer(fileCSV)
 writer.writerow(rows)
 
@@ -93,4 +103,4 @@ for filename, count in dictfiles.items():
         bigcount = count
         bigfilename = filename
 fileCSV.close()
-print('The file ' + bigfilename + ' has been touched ' + str(bigcount) + ' times.')
+print("The file " + bigfilename + " has been touched " + str(bigcount) + " times.")

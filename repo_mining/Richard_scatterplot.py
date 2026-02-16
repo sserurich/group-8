@@ -1,4 +1,3 @@
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -52,8 +51,14 @@ author_to_color = {a: color_cycle[i % len(color_cycle)] for i, a in enumerate(au
 plt.figure(figsize=(16, 10))
 for author in authors:
     sub = dff[dff[AUTHOR_COL] == author]
-    plt.scatter(sub["x"], sub["WeekStart"], label=author, s=35, alpha=0.75,
-                c=author_to_color[author])
+    plt.scatter(
+        sub["x"],
+        sub["WeekStart"],
+        label=author,
+        s=35,
+        alpha=0.75,
+        c=author_to_color[author],
+    )
 
 plt.xticks(range(len(top_files)), top_files, rotation=45, ha="right")
 plt.xlabel("File")
@@ -69,28 +74,37 @@ plt.tight_layout()
 
 os.makedirs(os.path.dirname(OUTPUT_FIG_CAL), exist_ok=True)
 plt.savefig(OUTPUT_FIG_CAL, dpi=300)
-#plt.show()
+# plt.show()
 
 # Plot 2: Showing Numeric project weeks on Y-axis (Main scatter plot required for the exercise)
 plt.figure(figsize=(12, 6))
 for author in authors:
     sub = dff[dff[AUTHOR_COL] == author]
-    plt.scatter(sub["x"], sub["ProjectWeek"], label=author, s=35, alpha=0.75,
-                c=author_to_color[author])
+    plt.scatter(
+        sub["x"],
+        sub["ProjectWeek"],
+        label=author,
+        s=35,
+        alpha=0.75,
+        c=author_to_color[author],
+    )
 
-plt.xticks(range(len(top_files)), top_files, rotation=45, ha="right",fontsize=10)
-plt.xlabel("File",  fontsize=12)
-plt.ylabel("Project Weeks (0 = project start)",  fontsize=12)
+plt.xticks(range(len(top_files)), top_files, rotation=45, ha="right", fontsize=10)
+plt.xlabel("File", fontsize=12)
+plt.ylabel("Project Weeks (0 = project start)", fontsize=12)
 
 # Make numeric scale readable
 plt.yticks(range(0, dff["ProjectWeek"].max() + 1, 25), fontsize=10)
 
-plt.title("Source File Touches Over Project Lifetime — Weeks vs Files (Colored by Author)", fontsize=14)
+plt.title(
+    "Source File Touches Over Project Lifetime — Weeks vs Files (Colored by Author)",
+    fontsize=14,
+)
 plt.legend(title="Author", bbox_to_anchor=(1.02, 1), loc="upper left", fontsize=9)
 plt.tight_layout()
 os.makedirs(os.path.dirname(OUTPUT_FIG_NUM), exist_ok=True)
 plt.savefig(OUTPUT_FIG_NUM, dpi=300, bbox_inches="tight")
-#plt.show()
+# plt.show()
 
 OUTPUT_FIG_CAL, OUTPUT_FIG_NUM
 
@@ -98,21 +112,21 @@ OUTPUT_FIG_CAL, OUTPUT_FIG_NUM
 ### Additional Insights for the executive summary report..
 
 # parse dates
-df['CommitDate'] = pd.to_datetime(df['CommitDate'])
+df["CommitDate"] = pd.to_datetime(df["CommitDate"])
 
 # top authors by touches
-top_authors = df['AuthorLogin'].value_counts().head(15)
+top_authors = df["AuthorLogin"].value_counts().head(15)
 
-top_files = df['ShortFile'].value_counts().head(15)
+top_files = df["ShortFile"].value_counts().head(15)
 
-bottom_authors = df['AuthorLogin'].value_counts().tail(15)
+bottom_authors = df["AuthorLogin"].value_counts().tail(15)
 
-bottom_files = df['ShortFile'].value_counts().tail(15)
+bottom_files = df["ShortFile"].value_counts().tail(15)
 
-top_authors, top_files , bottom_authors , bottom_files
+top_authors, top_files, bottom_authors, bottom_files
 
 
-plt.figure(figsize=(12, 4))  
+plt.figure(figsize=(12, 4))
 
 plt.subplot(1, 2, 1)
 top_files.plot(kind="bar")
@@ -129,47 +143,47 @@ plt.xlabel("Author", fontsize=12)
 plt.xticks(rotation=45, ha="right", fontsize=10)
 
 plt.tight_layout()
-#plt.savefig("figures/bar_charts.png", dpi=300, bbox_inches="tight")
+# plt.savefig("figures/bar_charts.png", dpi=300, bbox_inches="tight")
 os.makedirs(os.path.dirname(OUTPUT_FIG_TOP_AUTHORS_AND_FILES), exist_ok=True)
-plt.savefig(OUTPUT_FIG_TOP_AUTHORS_AND_FILES, dpi=300,bbox_inches="tight")
-#plt.show()
+plt.savefig(OUTPUT_FIG_TOP_AUTHORS_AND_FILES, dpi=300, bbox_inches="tight")
+# plt.show()
 
 plt.figure()
-top_authors.plot(kind='bar')
+top_authors.plot(kind="bar")
 plt.title("Top Authors by Source-File Touches")
 plt.ylabel("Number of Touches")
 plt.xlabel("Author")
 plt.tight_layout()
 os.makedirs(os.path.dirname(OUTPUT_FIG_TOP_AUTHORS), exist_ok=True)
 plt.savefig(OUTPUT_FIG_TOP_AUTHORS, dpi=300)
-#plt.show()
+# plt.show()
 
 plt.figure()
-top_files.plot(kind='bar')
+top_files.plot(kind="bar")
 plt.title("Top Source Files by Touches")
 plt.ylabel("Number of Touches")
 plt.xlabel("File")
 plt.tight_layout()
 os.makedirs(os.path.dirname(OUTPUT_FIG_TOP_FILES), exist_ok=True)
 plt.savefig(OUTPUT_FIG_TOP_FILES, dpi=300)
-#plt.show()
+# plt.show()
 
 plt.figure()
-bottom_authors.plot(kind='bar')
+bottom_authors.plot(kind="bar")
 plt.title("Bottom Authors by Source-File Touches")
 plt.ylabel("Number of Touches")
 plt.xlabel("Author")
 plt.tight_layout()
 os.makedirs(os.path.dirname(OUTPUT_FIG_BOTTOM_AUTHORS), exist_ok=True)
 plt.savefig(OUTPUT_FIG_BOTTOM_AUTHORS, dpi=300)
-#plt.show()
+# plt.show()
 
 plt.figure()
-bottom_files.plot(kind='bar')
+bottom_files.plot(kind="bar")
 plt.title("Bottom Source Files by Touches")
 plt.ylabel("Number of Touches")
 plt.xlabel("File")
 plt.tight_layout()
 os.makedirs(os.path.dirname(OUTPUT_FIG_BOTTOM_FILES), exist_ok=True)
 plt.savefig(OUTPUT_FIG_BOTTOM_FILES, dpi=300)
-#plt.show()
+# plt.show()

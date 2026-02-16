@@ -45,7 +45,9 @@ def main():
             file_to_idx[filename] = len(file_to_idx)
 
         if author not in author_to_color:
-            author_to_color[author] = color_cycle[len(author_to_color) % len(color_cycle)]
+            author_to_color[author] = color_cycle[
+                len(author_to_color) % len(color_cycle)
+            ]
 
         week_index = (dt - start_date).days // 7
         x_vals.append(week_index)
