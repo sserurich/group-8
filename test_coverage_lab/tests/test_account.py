@@ -164,7 +164,24 @@ def test_delete_account(setup_account):
 # - Ensure accounts can be deactivated.
 # - Verify that deactivated accounts cannot perform certain actions.
 # - Ensure reactivation correctly restores the account.
+# ===========================
+# Test: Account Deactivation/Reactivate
+# Author: Matthew Jackson
+# Date: 2026-02-11
+# Description: test deactivation of account and the subsequent reactivation, verify
+# deactivated accounted cannot perform actions
 
+def test_account_activation(setup_acc):
+    account = setup_acc
+    account.deactivate()
+    if account.disabled == False:
+        assert False
+    account.reactivate()
+    
+    assert account.disabled is False
+    
+    
+# ===========================
 # TODO 10: Test Email Uniqueness Enforcement
 # - Ensure that duplicate emails are not allowed.
 # - Verify that accounts must have a unique email in the database.

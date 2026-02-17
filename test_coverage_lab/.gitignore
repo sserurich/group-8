@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+#resolving pytest issues - Matthew Jackson
+.test_coverage_lab/ci_lab/src/__pycache__
+.test_coverage_lab/ci_lab/test/__pycache__
