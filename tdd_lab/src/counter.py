@@ -12,6 +12,9 @@ def counter_exists(name):
   """Check if counter exists"""
   return name in COUNTERS
 
+def get_counter_value(name):
+    """Return counter value"""
+    return COUNTERS.get(name)
 
 @app.route('/counters/<name>', methods=['POST'])
 def create_counter(name):
@@ -23,7 +26,7 @@ def create_counter(name):
 
 
 @app.route("/counters/<name>", methods=["GET"])
-def get_counter(name):
+def get_existing_counter(name):
     """Retrieve a counter by name"""
     if not counter_exists(name):
         return jsonify(
@@ -31,3 +34,33 @@ def get_counter(name):
         ), status.HTTP_404_NOT_FOUND
 
     return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
+    
+
+@app.route('/counters/<name>', methods=['GET'])
+def get_counter(name):
+    """Retrieve a counter"""
+
+    value = get_counter_value(name)
+
+    if value is None:
+        return jsonify(
+            {"error": f"Counter {name} not found"}
+        ), status.HTTP_404_NOT_FOUND
+
+    return jsonify({name: value}), status.HTTP_200_OK
+
+@app.route('/counters/<name>', methods=['DELETE'])
+def delete_counter(name):
+    """Delete a counter"""
+    
+    if not counter_exists(name):
+        return jsonify(
+            {"error": f"Counter {name} not found"}
+        ), status.HTTP_404_NOT_FOUND
+
+    del COUNTERS[name]
+    return jsonify({name: "deleted"}), status.HTTP_204_NO_CONTENT
+
+@app.route('/counters', methods=['GET'])
+def list_counters():
+    return jsonify(COUNTERS), status.HTTP_200_OK
