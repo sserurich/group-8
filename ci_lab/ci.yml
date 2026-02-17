@@ -34,7 +34,7 @@ jobs:
         run: flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
       
       - name: Upload Coverage Artifacts
-        uses: actions/upload-Artifacts
+        uses: actions/upload-Artifacts@v4
         with:
           name: coverage-report
           path: html/
