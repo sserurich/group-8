@@ -52,6 +52,7 @@ class TestCounterEndpoints:
                 result = http_method('/counters/foo')
 
                 assert result.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+<<<<<<< add-test-delete-counter-test
     # ===========================
     # Test: Delete a counter
     # Author: Thomas Feng
@@ -68,3 +69,18 @@ class TestCounterEndpoints:
         # delete the counter
         result = client.delete('/counters/delete-test')
         assert result.status_code == status.HTTP_204_NO_CONTENT
+=======
+
+    # ===========================
+    # Test: Prevent duplicate counter
+    # Author: Nevryk Soliven
+    # Date: 2026-02-16
+    # Description: Ensure duplicate counters raise a conflict error.
+    # ===========================
+    def test_post_prevent_duplicate_counter(self, client):
+        """Prevent duplicate counter"""
+        result = client.post('/counters/foo_dupe_test')
+        assert result.status_code == status.HTTP_201_CREATED
+        result = client.post('/counters/foo_dupe_test')
+        assert result.status_code == status.HTTP_409_CONFLICT
+>>>>>>> main

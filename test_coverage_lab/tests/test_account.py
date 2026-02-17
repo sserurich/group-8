@@ -101,9 +101,26 @@ Each test should include:
 # - Ensure an account’s email can be successfully updated.
 # - Verify that the updated email is stored in the database.
 
-# TODO 3: Test Finding an Account by ID
-# - Create an account and retrieve it using its ID.
-# - Ensure the retrieved account matches the created one.
+
+# ===========================
+# Test: Missing Required Fields
+# Author: Nevryk Soliven
+# Date: 2026-02-16
+# Description: Ensure Account creation fails when required fields are missing.
+# ===========================
+
+def test_missing_required_fields():
+    """Test that creating an account without required fields raises an error"""
+    from sqlalchemy.exc import IntegrityError
+
+    # Try creating account without name and email
+    account = Account()
+    db.session.add(account)
+
+    with pytest.raises(IntegrityError):
+        db.session.commit()
+
+    db.session.rollback()
 
 # ===========================
 # Test: Invalid Email Input
@@ -231,6 +248,28 @@ def test_withdrawal_insufficient_funds():
 # TODO 10: Test Email Uniqueness Enforcement
 # - Ensure that duplicate emails are not allowed.
 # - Verify that accounts must have a unique email in the database.
+# ===========================
+# Test: Email Uniqueness Enforcement
+# Author: Jacob Armstrong
+# Date: 2026-02-16
+# Description: Ensure that no two accounts can have the same email.
+# ===========================
+def test_email_uniqueness_enforcement():
+    #create 2 accounts with the same email and see if they conflict
+
+    #create first account
+    account1 = Account(name="John", email="John@example.com", role="user")
+    db.session.add(account1)
+    db.session.commit()
+    
+    # Attempt to create second account with the same email
+    account2 = Account(name="notJohn", email="John@example.com", role="user")
+    db.session.add(account2)
+    
+    
+    with pytest.raises(Exception):
+        db.session.commit()
+
 
 # TODO 11: Test Role-Based Access
 # - Ensure users with different roles ('admin', 'user', 'guest') have appropriate permissions.
