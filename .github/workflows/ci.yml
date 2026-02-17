@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Tests with Pytest
-        run: pytest --cov=src --cov-report=term-missing
+        run: pytest --cov=src --cov-report=term-missing --cov-report=html
 
       - name: Install Flake8
         run: pip install flake8
@@ -34,8 +34,8 @@ jobs:
         run: flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
       
       - name: Upload Coverage Artifacts
-        uses: actions/upload-Artifacts@v4 #github actions
+        uses: actions/upload-artifacts@v4 #github actions
         with:
           name: coverage-report
-          path: html/
+          path: ci_lab/htmlcov/
 
