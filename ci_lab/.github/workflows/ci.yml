@@ -1,6 +1,6 @@
 name: CI Workflow  # Name of the workflow
 
-on:
+"on":  # Define the events that trigger the workflow
   push:
     branches:
       - mine_repository
