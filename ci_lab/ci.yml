@@ -2,7 +2,9 @@ name: CI Workflow  # Name of the workflow
 
 on:
   push:
+    branches: [ "mine_repository" ]
   pull_request:
+    branches: [ "mine_repository" ]
 
 jobs:
   build:
