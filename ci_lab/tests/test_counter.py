@@ -40,7 +40,7 @@ class TestCounterEndpoints:
         """It should retrieve an existing counter"""
         client.post('/counters/test_counter')
         response = client.get('/counters/test_counter')
-        assert response.status_code == HTTPStatus.OK
+        assert response.status_code == HTTPStatus.NOT_FOUND # deliberate failure
         assert response.get_json() == {"test_counter": 0}
 
     def test_return_404_for_non_existent_counter(self, client):
