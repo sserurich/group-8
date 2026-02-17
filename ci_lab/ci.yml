@@ -1,4 +1,4 @@
-name: CI Workflow  # from ci_lab/ci.yml
+name: CI Workflow  # Name of the workflow
 
 on:
   push:
@@ -34,8 +34,7 @@ jobs:
         run: flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
       
       - name: Upload Coverage Artifacts
-        uses: actions/upload-Artifacts@v4 #github actions
+        uses: actions/upload-Artifacts
         with:
           name: coverage-report
           path: html/
-
