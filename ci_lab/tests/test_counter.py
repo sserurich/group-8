@@ -277,3 +277,21 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
         # TODO: Add an assertion to verify the error message specifically says 'Invalid counter name'S
+
+    # ===========================
+    # Test: Test for modifying a deleted counter
+    # Author: Thomas Feng
+    # Modification: Ensure that a deleted counter cannot be modified
+    # ===========================
+    def test_modify_deleted_counter(self, client):
+        """It should not allow modifying a deleted counter"""
+
+        # create a counter to delete
+        client.post('/counters/deleted-modifiy-test')
+
+        # delete the counter
+        client.delete('/counters/deleted-modifiy-test')
+
+        # attempt to modify the deleted counter
+        response = client.put('/counters/deleted-modifiy-test/set/5')
+        assert response.status_code == HTTPStatus.NOT_FOUND
