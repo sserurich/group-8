@@ -7,6 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+        
     defaults:
       run:
         working-directory: ci_lab  # Set the default working directory for all steps
@@ -14,10 +19,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Set Up Python
+      - name: Set Up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"  # Ensure consistency in Python version
+          python-version: ${{ matrix.python-version }} # Ensure consistency in Python version
 
       - name: Install Dependencies
         run: |
