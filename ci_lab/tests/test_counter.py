@@ -277,3 +277,25 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
         # TODO: Add an assertion to verify the error message specifically says 'Invalid counter name'S
+    
+
+    def test_delete_removes_counter_from_get_and_list(self, client):
+        """It should remove the counter so GET returns 404 and it no longer appears in the list."""
+        # Arrange: create and increment a counter so it has a non-zero value
+        client.post("/counters/temp")
+        client.put("/counters/temp")  # temp becomes 1
+
+        # Act: delete it
+        delete_resp = client.delete("/counters/temp")
+
+        # Assert: delete succeeded
+        assert delete_resp.status_code == HTTPStatus.NO_CONTENT
+
+        # Assert: retrieving the deleted counter returns 404
+        get_resp = client.get("/counters/temp")
+        assert get_resp.status_code == HTTPStatus.NOT_FOUND
+
+        # Assert: list endpoint does not include the deleted counter
+        list_resp = client.get("/counters")
+        assert list_resp.status_code == HTTPStatus.OK
+        assert "temp" not in list_resp.get_json()
